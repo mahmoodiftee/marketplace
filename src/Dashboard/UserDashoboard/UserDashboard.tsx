@@ -4,10 +4,24 @@ import { Button, Layout, Menu, theme } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks/hooks";
 import { clearAuth } from "../../Redux/Features/User/authSlice";
-import { RiMenuFold4Fill } from "react-icons/ri";
-import { RxCross2 } from "react-icons/rx";
+import { BsShopWindow } from "react-icons/bs";
+import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "react-icons/ri";
+import { TbLogout } from "react-icons/tb";
 
-const { Header, Sider, Content } = Layout;
+const siderStyle: React.CSSProperties = {
+  overflow: "auto",
+  height: "100vh",
+  position: "fixed",
+  insetInlineStart: 0,
+  top: 0,
+  bottom: 0,
+  scrollbarWidth: "thin",
+  scrollbarGutter: "stable",
+  borderRight: "1px solid #e0e0e0",
+  background: "#fff",
+};
+
+const { Header, Content, Sider } = Layout;
 
 const AdminDashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,27 +46,30 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <Layout style={{ height: "auto" }}>
+    <Layout hasSider style={{ height: "auto" }}>
       <Sider
+        style={siderStyle}
         collapsible
         collapsed={collapsed}
         onCollapse={(collapsedState) => setCollapsed(collapsedState)}
-        style={{
-          background: colorBgContainer,
-          borderRight: "1px solid #e0e0e0",
-        }}
         collapsedWidth="60"
         trigger={null}
       >
-        <div className={`${collapsed? 'justify-end' : 'justify-between'} flex items-center`}>
-          <div className={`pl-2 ${collapsed? 'hidden' : 'flex'} font-bold`}>User</div>
+        <div
+          className={`${
+            collapsed ? "justify-center" : "justify-between"
+          } flex items-center`}
+        >
+          <div className={`pl-7 ${collapsed ? "hidden" : "flex"} font-bold`}>
+            User
+          </div>
           <Button
             type="text"
             icon={
               collapsed ? (
-                <RiMenuFold4Fill className="text-xl font-bold" />
+                <RiArrowRightDoubleLine className="text-xl font-bold" />
               ) : (
-                <RxCross2 className="text-xl" />
+                <RiArrowLeftDoubleLine className="text-xl" />
               )
             }
             onClick={toggleCollapse}
@@ -65,13 +82,23 @@ const AdminDashboard: React.FC = () => {
           items={[
             {
               key: "1",
+              icon: <BsShopWindow />,
+              label: <Link to="/user">Marketplace</Link>,
+            },
+            {
+              key: "2",
               icon: <UserOutlined />,
-              label: <Link to="/dashboard/user">Dashboard</Link>,
+              label: <Link to="/user/dashboard">Dashboard</Link>,
+            },
+            {
+              key: "3",
+              icon: <TbLogout />,
+              label: <button onClick={logOutHandle}>Logout</button>,
             },
           ]}
         />
       </Sider>
-      <Layout>
+      <Layout style={{ marginInlineStart: collapsed? 60 : 200 }}>
         <Header
           style={{
             padding: 0,
@@ -81,27 +108,11 @@ const AdminDashboard: React.FC = () => {
             justifyContent: "space-between",
             borderBottom: "1px solid #e0e0e0",
           }}
-        >
-          <div
-            style={{
-              color: "#000",
-              fontWeight: "bold",
-              fontSize: "18px",
-              marginLeft: "15px",
-            }}
-          >
-            Dashboard
-          </div>
-          <div style={{ marginRight: "15px" }}>
-            <Button type="primary" onClick={logOutHandle}>
-              Logout
-            </Button>
-          </div>
-        </Header>
+        ></Header>
         <Content
           style={{
             padding: 24,
-            minHeight: 280,
+            minHeight: "100vh",
             background: colorBgContainer,
           }}
         >

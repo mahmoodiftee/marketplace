@@ -1,23 +1,27 @@
 import UserDashboard from "../Dashboard/UserDashoboard/UserDashboard";
-import Home from "../Pages/Users/Home/Home";
+import Dashboard from "../Pages/Users/Dashboard/Dashboard";
+import Marketplace from "../Pages/Users/Marketplace/Marketplace";
 import ProtectedRoute from "../PrivetRoutes/ProtectedRoute";
 
-
-
-
 const UserRoutes = [
-
-    {
-        path: "/dashboard/user",
-        element: <ProtectedRoute > <UserDashboard /></ProtectedRoute>, 
-        children: [
-            {
-                index: true, 
-                element: <Home />, 
-            },
-        
-        ],
-    },
+  {
+    path: "/user",
+    element: (
+      <ProtectedRoute>
+        <UserDashboard />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Marketplace />,
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard />,
+      },
+    ],
+  },
 ];
 
-export default UserRoutes; 
+export default UserRoutes;
