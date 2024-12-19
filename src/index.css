@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+}
+
+.gradient-mask {
+  mask-image: linear-gradient(to left, transparent 0%, rgb(255, 255, 255) 5%);
+}
