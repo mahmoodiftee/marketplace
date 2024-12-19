@@ -110,10 +110,10 @@ const AdminDashboard: React.FC = () => {
           }}
         ></Header>
         <Content
+        className="max-w-maxWidth mx-auto"
           style={{
             padding: 24,
             minHeight: "100vh",
-            background: colorBgContainer,
           }}
         >
           <Outlet />
