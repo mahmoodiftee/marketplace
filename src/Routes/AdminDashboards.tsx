@@ -1,11 +1,11 @@
 import {  Navigate } from "react-router-dom";
 import Login from "../Pages/Login/Login";
-import AdminDashboard from "../Dashboard/AdminDashboard/AdminDashobard";
 import Home from "../Pages/Admin/Home/Home";
 import Payment from "../Pages/Admin/Payment/Payment";
 import SignIn from "../Pages/SingIn/SingIn";
 import ProtectedRouteAdmin from "../PrivetRoutes/ProtectedRoute";
 import UnAuthorized from "../Pages/Unauthorized/UnAuthorized";
+import AdminDashboard from "../Dashboard/UserDashoboard/UserDashboard";
 
 
 const Adminroutes = [

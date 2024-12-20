@@ -4,9 +4,9 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { store } from './Redux/app/store'
-import Adminroutes from './Routes/AdminDashboard'
-import UserRoutes from './Routes/UserDashboard'
 import Error from './Pages/Error/Error'
+import Adminroutes from './Routes/AdminDashboards'
+import UserRoutes from './Routes/UserDashboard'
 
 
 // Append the error route at the end of both Admin and User routes

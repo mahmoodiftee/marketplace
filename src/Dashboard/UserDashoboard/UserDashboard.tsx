@@ -27,7 +27,7 @@ const AdminDashboard: React.FC = () => {
   const menuRef = useRef<HTMLDivElement>(null);
   const location = useLocation();  
 
-  const appPost = location.pathname === "/user/add-post";
+  const appPost = location.pathname === "/user";
 
   useEffect(() => {
     fetchTabs(setTabs);
@@ -90,8 +90,8 @@ const AdminDashboard: React.FC = () => {
           ]}
         />
       </Sider>
-      <Layout style={{ marginInlineStart: 60, marginTop: 70 }}>
-        {!appPost && ( 
+      <Layout style={{ marginInlineStart: appPost ? 60 : undefined, marginTop: appPost ? 70 : undefined }}>
+        {appPost && ( 
           <Header style={headerStyles}>
             <div
               className={`max-w-maxWidth flex mx-auto justify-center items-center gap-2 gradient-mask `}
