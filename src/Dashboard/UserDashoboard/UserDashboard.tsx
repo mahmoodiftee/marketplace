@@ -1,12 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { LeftOutlined, RightOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useEffect, useState, useRef } from "react";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks/hooks";
-import { clearAuth } from "../../Redux/Features/User/authSlice";
 import { BsShopWindow } from "react-icons/bs";
 import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
+import { MdLibraryAdd } from "react-icons/md";
+
+import {
+  fetchTabs,
+  scrollLeft,
+  scrollRight,
+  logOutHandle,
+  headerStyles,
+  siderStyles,
+} from "./userDashboardfunctions";
 
 const { Header, Content, Sider } = Layout;
 
@@ -15,63 +24,19 @@ const AdminDashboard: React.FC = () => {
   const [tabs, setTabs] = useState<{ id: number; name: string }[]>([]);
   const LogOutDispatch = useAppDispatch();
   const navigate = useNavigate();
-  const menuRef = React.useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const location = useLocation();  
+
+  const appPost = location.pathname === "/user/add-post";
 
   useEffect(() => {
-    const fetchTabs = async () => {
-      try {
-        const response = await fetch("/tabs.json");
-        const data = await response.json();
-        setTabs(data);
-      } catch (error) {
-        console.error("Error fetching tabs:", error);
-      }
-    };
-
-    fetchTabs();
+    fetchTabs(setTabs);
   }, []);
-
-  const scrollLeft = () => {
-    if (menuRef.current) {
-      menuRef.current.scrollBy({ left: -200, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (menuRef.current) {
-      menuRef.current.scrollBy({ left: 200, behavior: "smooth" });
-    }
-  };
-
-  const toggleCollapse = () => {
-    setCollapsed(!collapsed);
-  };
-
-  const logOutHandle = async () => {
-    try {
-      LogOutDispatch(clearAuth());
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
 
   return (
     <Layout hasSider style={{ height: "auto" }}>
       <Sider
-        style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          zIndex: 15,
-          insetInlineStart: 0,
-          top: 0,
-          bottom: 0,
-          scrollbarWidth: "thin",
-          scrollbarGutter: "stable",
-          borderRight: "1px solid #e0e0e0",
-          background: "#fff",
-        }}
+        style={siderStyles}
         collapsible
         collapsed={collapsed}
         onCollapse={(collapsedState) => setCollapsed(collapsedState)}
@@ -95,7 +60,7 @@ const AdminDashboard: React.FC = () => {
                 <RiArrowLeftDoubleLine className="text-xl" />
               )
             }
-            onClick={toggleCollapse}
+            onClick={() => setCollapsed(!collapsed)}
           />
         </div>
         <Menu
@@ -110,61 +75,66 @@ const AdminDashboard: React.FC = () => {
             },
             {
               key: "2",
-              icon: <UserOutlined />,
-              label: <Link to="/user/dashboard">Dashboard</Link>,
+              icon: <MdLibraryAdd />,
+              label: <Link to="/user/add-post">Add post</Link>,
             },
             {
               key: "3",
               icon: <TbLogout />,
-              label: <button onClick={logOutHandle}>Logout</button>,
+              label: (
+                <button onClick={() => logOutHandle(LogOutDispatch, navigate)}>
+                  Logout
+                </button>
+              ),
             },
           ]}
         />
       </Sider>
       <Layout style={{ marginInlineStart: 60, marginTop: 70 }}>
-        <Header
-          style={{ paddingLeft: 0 }}
-          className="fixed top-0 w-full z-10 border-b-[1px] bg-[#f0f2f5] flex justify-center items-center overflow-hidden"
-        >
-          <div className="max-w-maxWidth mx-auto flex justify-center items-center gap-2 gradient-mask ">
-            <div className="flex items-center gap-2">
-              <Button
-                color="default"
-                variant="filled"
-                className="hidden md:flex"
-                icon={<LeftOutlined />}
-                onClick={scrollLeft}
-              />
-              <Button
-                color="default"
-                variant="filled"
-                className="hidden md:flex"
-                icon={<RightOutlined />}
-                onClick={scrollRight}
-              />
-            </div>
-
+        {!appPost && ( 
+          <Header style={headerStyles}>
             <div
-              ref={menuRef}
-              className="flex pl-[38%] pr-[40%] md:px-0 md:pr-32 overflow-x-auto items-center no-scrollbar gap-4"
-              style={{
-                flexGrow: 1,
-                whiteSpace: "nowrap",
-                scrollBehavior: "smooth",
-              }}
+              className={`max-w-maxWidth flex mx-auto justify-center items-center gap-2 gradient-mask `}
             >
-              {tabs.map((item, index) => (
+              <div className="flex items-center gap-2">
                 <Button
-                  key={item?.id || `tab-${index}`} 
                   color="default"
                   variant="filled"
-                >
-                  {item?.name}
-                </Button>
-              ))}
+                  className="hidden md:flex"
+                  icon={<LeftOutlined />}
+                  onClick={() => scrollLeft(menuRef)}
+                />
+                <Button
+                  color="default"
+                  variant="filled"
+                  className="hidden md:flex"
+                  icon={<RightOutlined />}
+                  onClick={() => scrollRight(menuRef)}
+                />
+              </div>
+
+              <div
+                ref={menuRef}
+                className="flex pl-[38%] pr-[40%] md:px-0 md:pr-32 overflow-x-auto items-center no-scrollbar gap-4"
+                style={{
+                  flexGrow: 1,
+                  whiteSpace: "nowrap",
+                  scrollBehavior: "smooth",
+                }}
+              >
+                {tabs.map((item, index) => (
+                  <Button
+                    key={item?.id || `tab-${index}`}
+                    color="default"
+                    variant="filled"
+                  >
+                    {item?.name}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
-        </Header>
+          </Header>
+        )}
         <Content
           className={`max-w-maxWidth mx-auto ${
             collapsed ? "p-1" : "p-1 md:p-6"

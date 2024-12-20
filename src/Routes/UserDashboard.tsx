@@ -1,5 +1,5 @@
 import UserDashboard from "../Dashboard/UserDashoboard/UserDashboard";
-import Dashboard from "../Pages/Users/Dashboard/Dashboard";
+import AddPost from "../Pages/Users/AddPost/AddPost";
 import Marketplace from "../Pages/Users/Marketplace/Marketplace";
 import ProtectedRoute from "../PrivetRoutes/ProtectedRoute";
 
@@ -17,8 +17,8 @@ const UserRoutes = [
         element: <Marketplace />,
       },
       {
-        path: "dashboard",
-        element: <Dashboard />,
+        path: "add-post",
+        element: <AddPost />,
       },
     ],
   },
