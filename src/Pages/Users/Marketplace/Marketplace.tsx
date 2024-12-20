@@ -7,6 +7,7 @@ import Meta from "antd/es/card/Meta";
 const Marketplace = () => {
   const dispatch = useAppDispatch();
   const { items, loading, error } = useAppSelector((state) => state.data);
+  console.log(items);
 
   useEffect(() => {
     dispatch(fetchData());
@@ -24,8 +25,8 @@ const Marketplace = () => {
           cover={
             <img
               className="max-h-[300px] object-cover"
-              alt={item.imageUrl}
-              src={item.imageUrl}
+              alt={item?.image}
+              src={item?.image}
             />
           }
         >
@@ -46,15 +47,15 @@ const Marketplace = () => {
                 ></path>
               </svg>
             </button>
-            <Meta className="h-auto md:h-16 " description={item.description} />
+            <Meta className="h-auto md:h-20 " title={item?.productName} description={item?.description} />
             <div className="flex flex-col w-full md:flex-row justify-start items-start md:justify-between mt-4 gap-4">
               <span className="flex justify-center items-center gap-1">
                 <Meta className="font-bold" description="Likes:" />{" "}
-                <Meta className="font-bold" description={item.like} />
+                <Meta className="font-bold" description={item?.like} />
               </span>
               <span className="flex justify-center items-center gap-1">
                 <Meta className="font-bold" description="Unlikes:" />{" "}
-                <Meta className="font-bold" description={item.unlike} />
+                <Meta className="font-bold" description={item?.unlike} />
               </span>
             </div>
           </div>

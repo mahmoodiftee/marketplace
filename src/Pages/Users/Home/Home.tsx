@@ -19,7 +19,7 @@ const Home = () => {
       {items.map((item) => (
         <div key={item.id} className="border p-4 rounded-lg shadow-md">
           <img
-            src={item.imageUrl}
+            src={item.image}
             alt="data"
             className="w-full h-48 object-cover rounded-t-lg"
           />

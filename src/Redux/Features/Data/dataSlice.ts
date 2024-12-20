@@ -1,11 +1,20 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface DataItem {
   id: number;
-  imageUrl: string;
+  image: string;
   description: string;
   like: number;
   unlike: number;
+  productName: string;
+  uploaderName: string;
+  category: string
+  phone: string;
+  whatsApp: string;
+  address: string;
+  skype: string;
+  telegram: string;
+  facebook: string;
 }
 
 interface DataState {
@@ -22,11 +31,11 @@ const initialState: DataState = {
 
 // Define async thunk for fetching data
 export const fetchData = createAsyncThunk<DataItem[]>(
-  'data/fetchData',
+  "data/fetchData",
   async () => {
-    const response = await fetch('/data.json'); 
+    const response = await fetch("/data.json");
     if (!response.ok) {
-      throw new Error('Failed to fetch data');
+      throw new Error("Failed to fetch data");
     }
     return response.json();
   }
@@ -34,7 +43,7 @@ export const fetchData = createAsyncThunk<DataItem[]>(
 
 // Create the slice
 const dataSlice = createSlice({
-  name: 'data',
+  name: "data",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -49,7 +58,7 @@ const dataSlice = createSlice({
       })
       .addCase(fetchData.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Unknown error';
+        state.error = action.error.message || "Unknown error";
       });
   },
 });
