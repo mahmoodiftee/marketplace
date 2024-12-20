@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LeftOutlined, RightOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
+import { Button, Layout, Menu } from "antd";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../Redux/hooks/hooks";
 import { clearAuth } from "../../Redux/Features/User/authSlice";
@@ -8,36 +8,35 @@ import { BsShopWindow } from "react-icons/bs";
 import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
 
-const siderStyle: React.CSSProperties = {
-  overflow: "auto",
-  height: "100vh",
-  position: "fixed",
-  zIndex: 15,
-  insetInlineStart: 0,
-  top: 0,
-  bottom: 0,
-  scrollbarWidth: "thin",
-  scrollbarGutter: "stable",
-  borderRight: "1px solid #e0e0e0",
-  background: "#fff",
-};
-
 const { Header, Content, Sider } = Layout;
 
 const AdminDashboard: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [tabs, setTabs] = useState<{ id: number; name: string }[]>([]);
   const LogOutDispatch = useAppDispatch();
   const navigate = useNavigate();
   const menuRef = React.useRef<HTMLDivElement>(null);
 
-  // Function to scroll left
+  useEffect(() => {
+    const fetchTabs = async () => {
+      try {
+        const response = await fetch("/tabs.json");
+        const data = await response.json();
+        setTabs(data);
+      } catch (error) {
+        console.error("Error fetching tabs:", error);
+      }
+    };
+
+    fetchTabs();
+  }, []);
+
   const scrollLeft = () => {
     if (menuRef.current) {
       menuRef.current.scrollBy({ left: -200, behavior: "smooth" });
     }
   };
 
-  // Function to scroll right
   const scrollRight = () => {
     if (menuRef.current) {
       menuRef.current.scrollBy({ left: 200, behavior: "smooth" });
@@ -60,7 +59,19 @@ const AdminDashboard: React.FC = () => {
   return (
     <Layout hasSider style={{ height: "auto" }}>
       <Sider
-        style={siderStyle}
+        style={{
+          overflow: "auto",
+          height: "100vh",
+          position: "fixed",
+          zIndex: 15,
+          insetInlineStart: 0,
+          top: 0,
+          bottom: 0,
+          scrollbarWidth: "thin",
+          scrollbarGutter: "stable",
+          borderRight: "1px solid #e0e0e0",
+          background: "#fff",
+        }}
         collapsible
         collapsed={collapsed}
         onCollapse={(collapsedState) => setCollapsed(collapsedState)}
@@ -110,9 +121,7 @@ const AdminDashboard: React.FC = () => {
           ]}
         />
       </Sider>
-      <Layout
-        style={{ marginInlineStart: 60, marginTop: 70 }}
-      >
+      <Layout style={{ marginInlineStart: 60, marginTop: 70 }}>
         <Header
           style={{ paddingLeft: 0 }}
           className="fixed top-0 w-full z-10 border-b-[1px] bg-[#f0f2f5] flex justify-center items-center overflow-hidden"
@@ -120,11 +129,15 @@ const AdminDashboard: React.FC = () => {
           <div className="max-w-maxWidth mx-auto flex justify-center items-center gap-2 gradient-mask ">
             <div className="flex items-center gap-2">
               <Button
+                color="default"
+                variant="filled"
                 className="hidden md:flex"
                 icon={<LeftOutlined />}
                 onClick={scrollLeft}
               />
               <Button
+                color="default"
+                variant="filled"
                 className="hidden md:flex"
                 icon={<RightOutlined />}
                 onClick={scrollRight}
@@ -133,16 +146,20 @@ const AdminDashboard: React.FC = () => {
 
             <div
               ref={menuRef}
-              className="flex overflow-x-auto items-center no-scrollbar gap-4"
+              className="flex pl-[38%] pr-[40%] md:px-0 md:pr-32 overflow-x-auto items-center no-scrollbar gap-4"
               style={{
                 flexGrow: 1,
                 whiteSpace: "nowrap",
                 scrollBehavior: "smooth",
               }}
             >
-              {[...Array(25).keys()].map((item) => (
-                <Button key={item} color="default" variant="solid">
-                  menu item {item + 1}
+              {tabs.map((item, index) => (
+                <Button
+                  key={item?.id || `tab-${index}`} 
+                  color="default"
+                  variant="filled"
+                >
+                  {item?.name}
                 </Button>
               ))}
             </div>

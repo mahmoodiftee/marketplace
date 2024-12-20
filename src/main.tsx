@@ -27,8 +27,6 @@ const Routes = createBrowserRouter([
 ]);
 
 
-console.log(Routes)
-
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
