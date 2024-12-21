@@ -15,6 +15,13 @@ interface DataItem {
   skype: string;
   telegram: string;
   facebook: string;
+  reviews: [
+    {
+      userName: string;
+      rating: number;
+      description: string;
+    }
+  ];
 }
 
 interface DataState {
