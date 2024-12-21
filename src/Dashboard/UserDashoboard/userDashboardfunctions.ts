@@ -38,58 +38,13 @@ export const logOutHandle = async (
   }
 };
 
-export const siderStyles: React.CSSProperties = {
-  overflow: "auto",
-  height: "100vh",
-  position: "fixed" as const,
-  zIndex: 15,
-  insetInlineStart: 0,
-  top: 0,
-  bottom: 0,
-  scrollbarWidth: "thin",
-  scrollbarGutter: "stable",
-  borderRight: "1px solid #e0e0e0",
-  background: "#fff",
-};
 
 export const headerStyles: React.CSSProperties = {
-  paddingLeft: 0,
-  position: "fixed" as const,
-  top: 0,
   width: "100%",
-  zIndex: 50,
+  zIndex: 40,
   borderBottom: "1px solid #f0f2f5",
   background: "#f0f2f5",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  overflow: "hidden",
 };
-
-
-
-
-
-// <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}
-// items={[
-//   {
-//     key: "1",
-//     icon: <BsShopWindow />,
-//     label: <Link to="/user">Marketplace</Link>,
-//   },
-//   {
-//     key: "2",
-//     icon: <MdLibraryAdd />,
-//     label: <Link to="/user/add-post">Add post</Link>,
-//   },
-//   {
-//     key: "3",
-//     icon: <TbLogout />,
-//     label: (
-//       <button onClick={() => logOutHandle(LogOutDispatch, navigate)}>
-//         Logout
-//       </button>
-//     ),
-//   },
-// ]}
-// />

@@ -145,7 +145,7 @@ const DetailPage = () => {
   ];
 
   return (
-    <div className="max-w-maxWidth mx-auto px-1">
+    <div className="max-w-maxWidth mx-auto px-1 pt-10">
       <div className="flex flex-col md:flex-row md:p-4 p-1 mb-6">
         <div className="flex-1 max-h-96 max-w-96 overflow-hidden">
           <img
