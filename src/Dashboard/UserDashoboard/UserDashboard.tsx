@@ -36,12 +36,12 @@ const AdminDashboard: React.FC = () => {
     fetchTabs(setTabs);
   }, []);
   const handleTabClick = (category: string) => {
-    dispatch(setSelectedTab(category)); 
+    dispatch(setSelectedTab(category));
   };
 
   return (
     <Layout hasSider style={{ height: "auto" }}>
-      <Sider
+      {/* <Sider
         style={siderStyles}
         collapsible
         collapsed={collapsed}
@@ -95,13 +95,8 @@ const AdminDashboard: React.FC = () => {
             },
           ]}
         />
-      </Sider>
-      <Layout
-        style={{
-          marginInlineStart: appPost ? 60 : undefined,
-          marginTop: appPost ? 70 : undefined,
-        }}
-      >
+      </Sider> */}
+      <Layout style={{ marginTop: appPost ? 70 : undefined }}>
         {appPost && (
           <Header style={headerStyles}>
             <div
@@ -148,9 +143,7 @@ const AdminDashboard: React.FC = () => {
           </Header>
         )}
         <Content
-          className={`max-w-maxWidth mx-auto ${
-            collapsed ? "p-1" : "p-1 md:p-6"
-          }`}
+          className={`max-w-maxWidth mx-auto px-2`}
           style={{
             minHeight: "100vh",
           }}

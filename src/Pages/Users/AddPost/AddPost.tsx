@@ -76,7 +76,7 @@ const AddPost = () => {
     setFileList([]);
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: unknown) => {
     console.log("Form submitted with values: ", values);
   };
 
@@ -86,7 +86,7 @@ const AddPost = () => {
   };
 
   return (
-    <div className="ml-10 max-w-maxWidth mx-auto">
+    <div className="max-w-maxWidth mx-auto">
       <h1 className="my-10 text-4xl md:text-6xl text-center font-bold">
         Post Your Product{" "}
       </h1>

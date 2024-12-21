@@ -14,7 +14,6 @@ import TextArea from "antd/es/input/TextArea";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../../../../Redux/Features/Data/dataSlice";
 import { useAppDispatch, useAppSelector } from "../../../../Redux/hooks/hooks";
-import { SearchOutlined } from "@ant-design/icons";
 import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 
 const DetailPage = () => {
@@ -79,7 +78,7 @@ const DetailPage = () => {
     }
   };
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: unknown) => {
     console.log("Form submitted with values: ", values);
   };
 
@@ -146,9 +145,9 @@ const DetailPage = () => {
   ];
 
   return (
-    <div className="ml-10 max-w-maxWidth mx-auto md:p-4">
+    <div className="max-w-maxWidth mx-auto px-1">
       <div className="flex flex-col md:flex-row md:p-4 p-1 mb-6">
-        <div className="pl-6 pr-1 flex-1 max-h-96 max-w-96 overflow-hidden">
+        <div className="flex-1 max-h-96 max-w-96 overflow-hidden">
           <img
             src={item.image}
             alt={item.productName}
@@ -156,7 +155,7 @@ const DetailPage = () => {
           />
         </div>
 
-        <div className="flex-1 flex flex-col gap-2 justify-center items-start pl-6 md:mt-0 mt-6">
+        <div className="flex-1 flex flex-col gap-2 justify-center items-start md:mt-0 mt-6">
           <Button
             className="pointer-events-none font-medium"
             color="primary"
@@ -170,7 +169,7 @@ const DetailPage = () => {
             <Tooltip title="Like">
               <Button
                 className="text-xl font-bold"
-                type={isLiked ? "primary" : "default"} // Set to primary if liked
+                type={isLiked ? "primary" : "default"} 
                 shape="circle"
                 icon={<AiOutlineLike />}
                 onClick={handleLike}
@@ -179,7 +178,7 @@ const DetailPage = () => {
             <Tooltip title="Dislike">
               <Button
                 className="text-xl font-bold"
-                type={isDisliked ? "primary" : "default"} // Set to primary if disliked
+                type={isDisliked ? "primary" : "default"}
                 shape="circle"
                 icon={<AiOutlineDislike />}
                 onClick={handleDislike}
@@ -189,15 +188,15 @@ const DetailPage = () => {
         </div>
       </div>
 
-      <div className="pl-6 pr-1 mb-6">
-        <h1 className="text-2xl font-medium my-6">
+      <div className="pr-1 mb-6">
+        <h1 className="text-2xl font-bold text-black/70 my-6">
           Service provider information :
         </h1>
         <Descriptions bordered items={descriptionItems} />
       </div>
 
-      <div className="pl-6 pr-1 mb-20">
-        <h1 className="text-2xl font-medium my-6 pl-1">Reviews :</h1>
+      <div className="pr-1 mb-20">
+        <h1 className="text-2xl font-bold text-black/70 my-6">Reviews :</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {item?.reviews.map((review, index) => (
             <div key={index} className="p-4 border rounded-md">
@@ -211,12 +210,12 @@ const DetailPage = () => {
         </div>
       </div>
 
-      <div className="pl-6 pr-1 mb-20 max-w-96">
-        <h1 className="text-2xl font-medium my-6 pl-1">Add a Review :</h1>
+      <div className="pr-1 mb-20 max-w-96">
+        <h1 className="text-2xl font-bold text-black/70 my-6 pl-1">Add a Review :</h1>
         <Form
           layout="vertical"
           onFinish={onFinish}
-          className="space-y-4 border rounded-md p-4"
+          className="space-y-4 border font-medium rounded-md py-4 md:px-4 px-1"
         >
           <Form.Item
             label="Rating"
