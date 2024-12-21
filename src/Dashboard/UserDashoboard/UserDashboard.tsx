@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Button, Layout, Menu } from "antd";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
-import { useAppDispatch } from "../../Redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../Redux/hooks/hooks";
 import { BsShopWindow } from "react-icons/bs";
 import { RiArrowLeftDoubleLine, RiArrowRightDoubleLine } from "react-icons/ri";
 import { TbLogout } from "react-icons/tb";
@@ -16,22 +16,28 @@ import {
   headerStyles,
   siderStyles,
 } from "./userDashboardfunctions";
+import { setSelectedTab } from "../../Redux/Features/Tabs/SelectedtabSlice";
 
 const { Header, Content, Sider } = Layout;
 
 const AdminDashboard: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [collapsed, setCollapsed] = useState(false);
+  const { selectedTab } = useAppSelector((state) => state.tab);
   const [tabs, setTabs] = useState<{ id: number; name: string }[]>([]);
   const LogOutDispatch = useAppDispatch();
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();  
+  const location = useLocation();
 
   const appPost = location.pathname === "/user";
 
   useEffect(() => {
     fetchTabs(setTabs);
   }, []);
+  const handleTabClick = (category: string) => {
+    dispatch(setSelectedTab(category)); 
+  };
 
   return (
     <Layout hasSider style={{ height: "auto" }}>
@@ -90,8 +96,13 @@ const AdminDashboard: React.FC = () => {
           ]}
         />
       </Sider>
-      <Layout style={{ marginInlineStart: appPost ? 60 : undefined, marginTop: appPost ? 70 : undefined }}>
-        {appPost && ( 
+      <Layout
+        style={{
+          marginInlineStart: appPost ? 60 : undefined,
+          marginTop: appPost ? 70 : undefined,
+        }}
+      >
+        {appPost && (
           <Header style={headerStyles}>
             <div
               className={`max-w-maxWidth flex mx-auto justify-center items-center gap-2 gradient-mask `}
@@ -125,8 +136,9 @@ const AdminDashboard: React.FC = () => {
                 {tabs.map((item, index) => (
                   <Button
                     key={item?.id || `tab-${index}`}
-                    color="default"
-                    variant="filled"
+                    color={selectedTab === item.name ? "primary" : "default"}
+                    variant={selectedTab === item.name ? "solid" : "filled"}
+                    onClick={() => handleTabClick(item.name)}
                   >
                     {item?.name}
                   </Button>

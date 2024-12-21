@@ -1,4 +1,6 @@
+import React, { useEffect, useState } from "react";
 import {
+  Alert,
   Button,
   Descriptions,
   DescriptionsProps,
@@ -6,17 +8,22 @@ import {
   Input,
   Rate,
   Spin,
+  Tooltip,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { fetchData } from "../../../../Redux/Features/Data/dataSlice";
 import { useAppDispatch, useAppSelector } from "../../../../Redux/hooks/hooks";
+import { SearchOutlined } from "@ant-design/icons";
+import { AiOutlineLike, AiOutlineDislike } from "react-icons/ai";
 
 const DetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
-  const { items, loading } = useAppSelector((state) => state.data);
+  const { items, loading, error } = useAppSelector((state) => state.data);
+
+  const [isLiked, setIsLiked] = useState(false); // State for like button
+  const [isDisliked, setIsDisliked] = useState(false); // State for dislike button
 
   useEffect(() => {
     dispatch(fetchData());
@@ -31,6 +38,46 @@ const DetailPage = () => {
   if (!item) {
     return <div>Item not found</div>;
   }
+
+  if (error) return <Alert message={error} type="error" showIcon />;
+
+  const handleLike = async () => {
+    if (isLiked) {
+      setIsLiked(false);
+      try {
+        await fetch(`/api/unlike/${id}`, { method: "POST" });
+      } catch (error) {
+        console.error("Failed to remove like:", error);
+      }
+    } else {
+      setIsLiked(true); 
+      setIsDisliked(false);
+      try {
+        await fetch(`/api/like/${id}`, { method: "POST" });
+      } catch (error) {
+        console.error("Failed to like the item:", error);
+      }
+    }
+  };
+
+  const handleDislike = async () => {
+    if (isDisliked) {
+      setIsDisliked(false); 
+      try {
+        await fetch(`/api/undislike/${id}`, { method: "POST" }); 
+      } catch (error) {
+        console.error("Failed to remove dislike:", error);
+      }
+    } else {
+      setIsDisliked(true); 
+      setIsLiked(false); 
+      try {
+        await fetch(`/api/dislike/${id}`, { method: "POST" });
+      } catch (error) {
+        console.error("Failed to dislike the item:", error);
+      }
+    }
+  };
 
   const onFinish = (values: any) => {
     console.log("Form submitted with values: ", values);
@@ -111,7 +158,7 @@ const DetailPage = () => {
 
         <div className="flex-1 flex flex-col gap-2 justify-center items-start pl-6 md:mt-0 mt-6">
           <Button
-            className="pointer-events-none"
+            className="pointer-events-none font-medium"
             color="primary"
             variant="filled"
           >
@@ -119,6 +166,26 @@ const DetailPage = () => {
           </Button>
           <h1 className="text-4xl font-bold mb-2">{item.productName}</h1>
           <p className="text-base text-gray-700">{item.description}</p>
+          <div className="flex justify-center items-center gap-2 mt-4">
+            <Tooltip title="Like">
+              <Button
+                className="text-xl font-bold"
+                type={isLiked ? "primary" : "default"} // Set to primary if liked
+                shape="circle"
+                icon={<AiOutlineLike />}
+                onClick={handleLike}
+              />
+            </Tooltip>
+            <Tooltip title="Dislike">
+              <Button
+                className="text-xl font-bold"
+                type={isDisliked ? "primary" : "default"} // Set to primary if disliked
+                shape="circle"
+                icon={<AiOutlineDislike />}
+                onClick={handleDislike}
+              />
+            </Tooltip>
+          </div>
         </div>
       </div>
 
@@ -184,6 +251,5 @@ const DetailPage = () => {
     </div>
   );
 };
-
 
 export default DetailPage;
