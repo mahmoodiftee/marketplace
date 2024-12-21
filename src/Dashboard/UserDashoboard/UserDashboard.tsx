@@ -41,7 +41,7 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <Layout hasSider style={{ height: "auto" }}>
-      {/* <Sider
+      <Sider
         style={siderStyles}
         collapsible
         collapsed={collapsed}
@@ -69,33 +69,8 @@ const AdminDashboard: React.FC = () => {
             onClick={() => setCollapsed(!collapsed)}
           />
         </div>
-        <Menu
-          theme="light"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <BsShopWindow />,
-              label: <Link to="/user">Marketplace</Link>,
-            },
-            {
-              key: "2",
-              icon: <MdLibraryAdd />,
-              label: <Link to="/user/add-post">Add post</Link>,
-            },
-            {
-              key: "3",
-              icon: <TbLogout />,
-              label: (
-                <button onClick={() => logOutHandle(LogOutDispatch, navigate)}>
-                  Logout
-                </button>
-              ),
-            },
-          ]}
-        />
-      </Sider> */}
+
+      </Sider>
       <Layout style={{ marginTop: appPost ? 70 : undefined }}>
         {appPost && (
           <Header style={headerStyles}>

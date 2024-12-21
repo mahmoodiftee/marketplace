@@ -65,3 +65,31 @@ export const headerStyles: React.CSSProperties = {
   alignItems: "center",
   overflow: "hidden",
 };
+
+
+
+
+
+// <Menu theme="light" mode="inline" defaultSelectedKeys={["1"]}
+// items={[
+//   {
+//     key: "1",
+//     icon: <BsShopWindow />,
+//     label: <Link to="/user">Marketplace</Link>,
+//   },
+//   {
+//     key: "2",
+//     icon: <MdLibraryAdd />,
+//     label: <Link to="/user/add-post">Add post</Link>,
+//   },
+//   {
+//     key: "3",
+//     icon: <TbLogout />,
+//     label: (
+//       <button onClick={() => logOutHandle(LogOutDispatch, navigate)}>
+//         Logout
+//       </button>
+//     ),
+//   },
+// ]}
+// />
