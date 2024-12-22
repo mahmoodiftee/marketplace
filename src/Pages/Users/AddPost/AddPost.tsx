@@ -88,7 +88,7 @@ const AddPost = () => {
   return (
     <div className="max-w-maxWidth mx-auto">
       <h1 className="my-10 text-4xl md:text-6xl text-center font-bold">
-        Post Your Product{" "}
+        Post Product
       </h1>
       <Form
         form={form}
@@ -101,58 +101,8 @@ const AddPost = () => {
           rate: 3.5,
           "color-picker": null,
         }}
-        className="max-w-[600px] flex flex-col items-center md:min-w-[600px]"
+        className="max-w-[800px] flex flex-col items-center md:min-w-[800px]"
       >
-        {/* Uploader Name */}
-        <Form.Item
-          className="w-full flex justify-center"
-          name="uploaderName"
-          rules={[{ required: true, message: "Please input your name" }]}
-        >
-          <Input className="md:min-w-96 min-w-72"  placeholder="Your Name" />
-        </Form.Item>
-
-        {/* Address */}
-        <Form.Item className="w-full flex justify-center" name="address">
-          <Input className="md:min-w-96 min-w-72" placeholder="Your Address" />
-        </Form.Item>
-
-        {/* Facebook Url */}
-        <Form.Item className="w-full flex justify-center" name="facebook">
-          <Input className="md:min-w-96 min-w-72" placeholder="Facebook Url" />
-        </Form.Item>
-
-        {/* WhatsApp Number */}
-        <Form.Item
-          className="w-full flex justify-center"
-          name="whatsApp"
-          rules={[
-            { required: true, message: "Please input your WhatsApp number!" },
-          ]}
-        >
-          <Input className="md:min-w-96 min-w-72" placeholder="WhatsApp Number" style={{ width: "100%" }} />
-        </Form.Item>
-
-        {/* Telegram Url */}
-        <Form.Item className="w-full flex justify-center" name="telegram">
-          <Input className="md:min-w-96 min-w-72" placeholder="Telegram Url" />
-        </Form.Item>
-
-        {/* Skype Url */}
-        <Form.Item className="w-full flex justify-center" name="skype">
-          <Input className="md:min-w-96 min-w-72" placeholder="Skype Url" />
-        </Form.Item>
-
-        {/* Phone Number */}
-        <Form.Item
-          className="w-full flex justify-center"
-          name="phone"
-          rules={[
-            { required: true, message: "Please input your phone number!" },
-          ]}
-        >
-          <Input className="md:min-w-96 min-w-72" placeholder="Phone Number" style={{ width: "100%" }} />
-        </Form.Item>
 
         {/* Product Name */}
         <Form.Item
@@ -162,7 +112,7 @@ const AddPost = () => {
             { required: true, message: "Please input your product name!" },
           ]}
         >
-          <Input className="md:min-w-96 min-w-72" placeholder="Product Name" />
+          <Input className="md:min-w-[500px] min-w-72" placeholder="Product Name" />
         </Form.Item>
 
         {/* Product Description */}
@@ -171,7 +121,7 @@ const AddPost = () => {
           name="description"
           rules={[{ required: true, message: "Please Provide Description" }]}
         >
-          <TextArea className="md:min-w-96 min-w-72" placeholder="Description" rows={4} />
+          <TextArea className="md:min-w-[500px] min-w-72" placeholder="Description" rows={4} />
         </Form.Item>
 
         {/* Category Selection */}
@@ -181,7 +131,7 @@ const AddPost = () => {
           hasFeedback
           rules={[{ required: true, message: "Please select your category!" }]}
         >
-          <Select className="md:min-w-96 min-w-72" placeholder="Please select a category">
+          <Select className="md:min-w-[500px] min-w-72" placeholder="Please select a category">
             {tabs.map((tab) => (
               <Option key={tab.id} value={tab.name}>
                 {tab.name}
@@ -196,7 +146,7 @@ const AddPost = () => {
           rules={[{ required: true, message: "Please Select Product Image" }]}
         >
           <Upload
-          className="md:min-w-96 min-w-72"
+          className="md:min-w-[500px] min-w-72"
             customRequest={handleCustomRequest}
             listType="picture-card"
             fileList={fileList}
@@ -211,7 +161,7 @@ const AddPost = () => {
           </Upload>
         </Form.Item>
 
-        <Form.Item className="w-full flex justify-start md:max-w-96 max-w-72">
+        <Form.Item className="w-full flex justify-start md:min-w-[500px] max-w-72">
           <Space>
             <Button type="primary" htmlType="submit">
               Submit

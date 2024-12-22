@@ -2,9 +2,9 @@
 import {jwtDecode} from "jwt-decode";
 
 interface CustomJwtPayload {
-  user_role: string; // Adjust according to your JWT structure
-  user_Name: string;
-  exp: number; // Include expiration
+  user_role: string; 
+  user_Email: string;
+  exp: number; 
 }
 
 export const decodedToken = (token: string): CustomJwtPayload => {

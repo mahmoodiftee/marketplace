@@ -11,7 +11,13 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import {
+  registerUser,
+  setError,
+  setLoading,
+} from "../../Redux/Features/User/RegisterSlice";
+import { AppDispatch } from "../../Redux/app/store";
 const validateMessages = {
   required: "${label} is required!",
   types: {
@@ -20,11 +26,13 @@ const validateMessages = {
   },
 };
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [form] = Form.useForm();
+  const [customLoading, customSetLoading] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
+  // const navigate = useNavigate();
 
-  
   const handleCustomRequest: UploadProps["customRequest"] = async ({
     file,
     onSuccess,
@@ -32,7 +40,7 @@ const SignIn: React.FC = () => {
   }) => {
     const uploadData = new FormData();
     uploadData.append("image", file as Blob);
-  
+
     try {
       const response = await axios.post(
         "https://api.imgbb.com/1/upload",
@@ -46,13 +54,10 @@ const SignIn: React.FC = () => {
           },
         }
       );
-  
+
       const imgURL = response.data.data.url;
-  
-      // Set only the imgURL in the user_Image field
       form.setFieldsValue({ user_Image: imgURL });
-  
-      // Update the fileList state for the Upload component
+
       setFileList([
         {
           uid: "1",
@@ -67,18 +72,38 @@ const SignIn: React.FC = () => {
       onError?.(error as Error);
     }
   };
-  
 
   const handleRemove = () => {
-    form.setFieldsValue({ image: null });
+    form.setFieldsValue({ user_Image: null });
     setFileList([]);
   };
 
-  const onFinish = async (values: unknown) => {
+  interface FormValues {
+    user_Name: string;
+    user_Address: string;
+    user_Email: string;
+    user_Password: string;
+    user_PhoneNumber: string;
+    user_Facebook: string;
+    user_Skype?: string;
+    user_Telegram?: string;
+    user_Image: string | null;
+  }
+
+  const onFinish = async (values: FormValues) => {
+    dispatch(setLoading(true));
+    customSetLoading(true);
+    // console.log(values);
+  
     try {
-      console.log("User data before sending:", values);
-    } catch (err) {
-      console.error("Failed to create user:", err);
+      dispatch(registerUser(values));
+      
+    } catch (error) {
+      dispatch(setError("Registration failed. Please try again later."));
+      console.error("Registration error:", error);
+    } finally {
+      customSetLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
@@ -121,7 +146,7 @@ const SignIn: React.FC = () => {
           name="user_Address"
           rules={[{ required: true, message: "User address is required" }]}
         >
-          <Input prefix={<UserOutlined />} placeholder="Yours Address *" />
+          <Input prefix={<UserOutlined />} placeholder="Your Address *" />
         </Form.Item>
 
         <Form.Item
@@ -186,10 +211,11 @@ const SignIn: React.FC = () => {
             placeholder="Telegram Profile url *"
           />
         </Form.Item>
+
         <Form.Item
           className="w-full flex justify-center"
           name="user_Image"
-          rules={[{ required: true, message: "Please Select Product Image" }]}
+          rules={[{ required: true, message: "Please Select Profile Image" }]}
         >
           <Upload
             className="md:min-w-96 min-w-72"
@@ -211,15 +237,17 @@ const SignIn: React.FC = () => {
           <Button
             type="primary"
             htmlType="submit"
+            loading={customLoading} 
             style={{ width: "100%", fontWeight: "bold" }}
           >
             Submit
           </Button>
         </Form.Item>
+
         <p>
-          Already Signed In?{" "}
-          <Link to={"/login"}>
-            <span className="text-green-600">Click Here</span>
+          Already ave an account?
+          <Link to="/login">
+            <span className="text-green-600 ml-2">Sign in</span>
           </Link>
         </p>
       </Form>
@@ -227,4 +255,4 @@ const SignIn: React.FC = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
