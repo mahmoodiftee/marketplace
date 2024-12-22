@@ -14,10 +14,11 @@ import {
 } from "./userDashboardfunctions";
 import { setSelectedTab } from "../../Redux/Features/Tabs/SelectedtabSlice";
 import { clearAuth } from "../../Redux/Features/User/authSlice";
+import HamburgerButton from "../AdminDashboard/HamburgerButton";
 
 const { Header, Content } = Layout;
 
-const AdminDashboard: React.FC = () => {
+const UserDashboard: React.FC = () => {
   const dispatch = useAppDispatch();
   const { selectedTab } = useAppSelector((state) => state.tab);
   const [tabs, setTabs] = useState<{ id: number; name: string }[]>([]);
@@ -74,37 +75,16 @@ const AdminDashboard: React.FC = () => {
           sidebarOpen ? "w-60" : "w-0"
         } bg-white text-black`}
       >
-        <button className="md:mx-3 md:my-2 mt-2">
-          <label className="hamburger">
-            <input
-              type="checkbox"
-              checked={sidebarOpen}
-              onChange={toggleSidebar}
-              className="hidden"
-            />
-            <svg
-              viewBox="0 0 32 32"
-              className="w-12 h-12 transform transition-transform duration-300"
-            >
-              <path
-                className={`${
-                  sidebarOpen ? "stroke-black" : "stroke-black"
-                }  line line-top-bottom`}
-                d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
-              ></path>
-              <path
-                className={`${
-                  sidebarOpen ? "stroke-black" : "stroke-black"
-                } line`}
-                d="M7 16 27 16"
-              ></path>
-            </svg>
-          </label>
-        </button>
+        <HamburgerButton
+          sidebarOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
+        />
 
         <div
           className={`${
-            sidebarOpen ? "opacity-100 transition-opacity delay-200" : "opacity-0"
+            sidebarOpen
+              ? "opacity-100 transition-opacity delay-200"
+              : "opacity-0"
           } flex flex-col items-center pt-6 px-4 pr-5 space-y-4`}
         >
           <Link to="/user" className="w-full">
@@ -141,8 +121,13 @@ const AdminDashboard: React.FC = () => {
       </div>
       <Layout style={{ marginTop: appPost ? 70 : undefined }}>
         {appPost && (
-          <Header className="fixed top-0 pl-24 overflow-hidden" style={headerStyles}>
-            <div className={`max-w-maxWidth flex mx-auto justify-center items-center gap-2 gradient-mask`}>
+          <Header
+            className="fixed top-0 pl-24 overflow-hidden"
+            style={headerStyles}
+          >
+            <div
+              className={`max-w-maxWidth flex mx-auto justify-center items-center gap-2 gradient-mask`}
+            >
               <div className="flex items-center gap-2">
                 <Button
                   color="default"
@@ -196,4 +181,4 @@ const AdminDashboard: React.FC = () => {
   );
 };
 
-export default AdminDashboard;
+export default UserDashboard;

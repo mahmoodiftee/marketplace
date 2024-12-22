@@ -17,8 +17,9 @@ const Marketplace = () => {
   }, [dispatch]);
 
   if (loading) {
-    return <Spin size="large" />;
+    return <div className="min-h-screen w-full flex justify-center items-center"><Spin size="large" /></div>;
   }
+
   if (error) return <Alert message={error} type="error" showIcon />;
   const filteredItems =
     selectedTab && selectedTab !== "All"

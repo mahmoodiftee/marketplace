@@ -1,100 +1,102 @@
+import React, { useEffect, useState } from "react";
+import { Button, Layout } from "antd";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../Redux/hooks/hooks";
+import { BsShopWindow } from "react-icons/bs";
+import { TbLogout } from "react-icons/tb";
+import { clearAuth } from "../../Redux/Features/User/authSlice";
+import HamburgerButton from "./HamburgerButton";
+import {NextUIProvider} from "@nextui-org/react";
+const { Content } = Layout;
 
-import {
-  TagsFilled,
-  UserOutlined,
+const AdminDashboard: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
+  const LogOutDispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-} from '@ant-design/icons';
-import { Button, Layout, Menu,  } from 'antd';
-import { Content, Header } from 'antd/es/layout/layout';
-import Sider from 'antd/es/layout/Sider';
+  const appPost = location.pathname === "/user";
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setSidebarOpen(true);
+      } else {
+        setSidebarOpen(false);
+      }
+    };
 
-import { MdPayment } from 'react-icons/md';
-import { Link, Outlet } from 'react-router-dom';
+    handleResize();
 
-export const AdminDashboard: React.FC = () => {
+    window.addEventListener("resize", handleResize);
 
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
+
+  const logOutHandle = async () => {
+    try {
+      LogOutDispatch(clearAuth());
+      navigate("/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
-    <Layout style={{ height: '100vh', border: '1px solid #e0e0e0', backgroundColor: "#F5F5F5" }}>
-      <Sider
-        theme="light"
-        trigger={null}
-        collapsible
+    <Layout hasSider style={{ height: "auto" }}>
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 z-50 h-full transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "w-60" : "w-0"
+        } bg-white text-black`}
       >
-        <div
-          className="demo-logo-vertical"
-          style={{
-            textAlign: 'center',
-            padding: '16px',
-            color: 'white',
-            fontSize: '24px',
-          }}
-        >
-          <h1 style={{ color: "black" }}>User</h1>
-        </div>
-        <Menu
-          theme="light"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: <Link to="/dashboard/admin">Dashboard</Link>,
-            },
-            {
-              key: '3',
-              icon: <MdPayment />,
-              label: <Link to="/dashboard/admin/payment">Payment Aprove</Link>,
-            },
-            {
-              key: '4',
-              icon: <TagsFilled />,
-              label: <Link to="/dashboard/admin/tg-support">Tg support </Link>,
-            }
-          ]}
+        <HamburgerButton
+          sidebarOpen={sidebarOpen}
+          toggleSidebar={toggleSidebar}
         />
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: "#fff",
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderBottom: '1px solid #e0e0e0',
-          }}
+
+        <div
+          className={`${
+            sidebarOpen
+              ? "opacity-100 transition-opacity delay-200"
+              : "opacity-0"
+          } flex flex-col items-center pt-6 px-4 pr-5 space-y-4`}
         >
+          <Link to="/admin" className="w-full">
+            <Button
+              color="primary"
+              className="w-full flex justify-start font-medium items-center gap-2.5 p-4 pl-6 text-lg"
+              variant="filled"
+            >
+              <BsShopWindow className="" />
+              Users
+            </Button>
+          </Link>
           <Button
-            type="text"
-         
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-          <div style={{ color: '#000', fontWeight: 'bold', fontSize: '18px' }}>
-            User Dashboard
-          </div>
-          <div style={{marginRight: '15px'}}>
-
-          </div>
-        </Header>
+            onClick={logOutHandle}
+            color="primary"
+            className="w-full flex justify-start font-medium items-center gap-2.5 p-4 pl-6 text-lg"
+            variant="filled"
+          >
+            <TbLogout className="" />
+            Logout
+          </Button>
+        </div>
+      </div>
+      <Layout style={{ marginTop: appPost ? 70 : undefined }}>
         <Content
+          className={`max-w-maxWidth mx-auto px-2`}
           style={{
-            margin: '24px 16px',
-            padding: 24,
-            minHeight: 280,
-
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
-            border: '1px solid #e0e0e0',
+            minHeight: "100vh",
           }}
         >
-          <Outlet />
+          <NextUIProvider>
+            <Outlet />
+          </NextUIProvider>
         </Content>
       </Layout>
     </Layout>
