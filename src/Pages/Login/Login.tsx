@@ -1,26 +1,13 @@
 import React from "react";
 import { Button, Form, Input } from "antd";
-import { Link , useNavigate} from "react-router-dom";
-import { JwtPayload } from 'jwt-decode';
-import { useAppDispatch } from "../../Redux/hooks/hooks";
+import { Link } from "react-router-dom";
 
 
 const validateMessages = {
   required: "${label} is required!",
 };
 
-// Define your custom interface extending JwtPayload
-interface CustomJwtPayload extends JwtPayload {
-  user_role: string; 
-  user_Name: string;
-}
-
 const Login: React.FC = () => {
-  const navigate = useNavigate()
-  const dispatchLogin = useAppDispatch();
-
-
-  
 
 
  return(

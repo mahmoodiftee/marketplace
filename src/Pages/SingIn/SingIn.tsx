@@ -1,9 +1,16 @@
-import React from "react";
-import { Button, Form, Input } from "antd";
-import { UserOutlined, MailOutlined, PhoneOutlined, FacebookOutlined, SkypeOutlined, LockOutlined } from '@ant-design/icons';
+import React, { useState } from "react";
+import { Button, Form, Input, Upload, UploadFile, UploadProps } from "antd";
+import {
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  FacebookOutlined,
+  SkypeOutlined,
+  LockOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { Link } from "react-router-dom";
-
-
+import axios from "axios";
 
 const validateMessages = {
   required: "${label} is required!",
@@ -14,21 +21,71 @@ const validateMessages = {
 };
 
 const SignIn: React.FC = () => {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [form] = Form.useForm();
 
-  const onFinish = async (values: any) => {
-    console.log("User data before sending:", values); // Log before sending
+  
+  const handleCustomRequest: UploadProps["customRequest"] = async ({
+    file,
+    onSuccess,
+    onError,
+  }) => {
+    const uploadData = new FormData();
+    uploadData.append("image", file as Blob);
+  
     try {
-
-    } catch (err) {
-        console.error("Failed to create user:", err);
+      const response = await axios.post(
+        "https://api.imgbb.com/1/upload",
+        uploadData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          params: {
+            key: "e63830251586e4c27e94823af65ea6ca",
+          },
+        }
+      );
+  
+      const imgURL = response.data.data.url;
+  
+      // Set only the imgURL in the user_Image field
+      form.setFieldsValue({ user_Image: imgURL });
+  
+      // Update the fileList state for the Upload component
+      setFileList([
+        {
+          uid: "1",
+          name: "image.png",
+          status: "done",
+          url: imgURL,
+        },
+      ]);
+      onSuccess?.("Upload successful!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      onError?.(error as Error);
     }
-};
+  };
+  
 
+  const handleRemove = () => {
+    form.setFieldsValue({ image: null });
+    setFileList([]);
+  };
 
+  const onFinish = async (values: unknown) => {
+    try {
+      console.log("User data before sending:", values);
+    } catch (err) {
+      console.error("Failed to create user:", err);
+    }
+  };
 
   return (
     <div className="flex justify-center items-center w-full h-screen p-4 bg-gray-100">
       <Form
+        form={form}
         name="signin-form"
         onFinish={onFinish}
         style={{
@@ -41,8 +98,16 @@ const SignIn: React.FC = () => {
         }}
         validateMessages={validateMessages}
       >
-        <h2 style={{ textAlign: "center", marginBottom: "1.5rem", fontSize: "1.5rem", fontWeight: "bold", color: "#333" }}>
-          Sign In
+        <h2
+          style={{
+            textAlign: "center",
+            marginBottom: "1.5rem",
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            color: "#333",
+          }}
+        >
+          Sign Up
         </h2>
 
         <Form.Item
@@ -53,39 +118,44 @@ const SignIn: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          name="user_Id"
-          rules={[{ required: true, message: "User ID is required" }]}
+          name="user_Address"
+          rules={[{ required: true, message: "User address is required" }]}
         >
-          <Input prefix={<UserOutlined />} placeholder="User ID *" />
+          <Input prefix={<UserOutlined />} placeholder="Yours Address *" />
         </Form.Item>
 
         <Form.Item
           name="user_Email"
-          rules={[{ type: "email", required: true, message: "Valid email is required" }]}
+          rules={[
+            {
+              type: "email",
+              required: true,
+              message: "Valid email is required",
+            },
+          ]}
         >
           <Input prefix={<MailOutlined />} placeholder="Email *" />
         </Form.Item>
 
         <Form.Item
-          name="user_password"
+          name="user_Password"
           rules={[
-              {
-                  required: true, 
-                  message: "Strong password is required",
-              },
-              {
-                  min: 8, 
-                  message: "Password must be at least 8 characters long",
-              },
-           ]}
+            {
+              required: true,
+              message: "Strong password is required",
+            },
+            {
+              min: 8,
+              message: "Password must be at least 8 characters long",
+            },
+          ]}
         >
-            <Input
-                prefix={<LockOutlined />} 
-                type="password" 
-                placeholder="Password is Required *"
-            />
+          <Input
+            prefix={<LockOutlined />}
+            type="password"
+            placeholder="Password is Required *"
+          />
         </Form.Item>
-
 
         <Form.Item
           name="user_PhoneNumber"
@@ -95,17 +165,46 @@ const SignIn: React.FC = () => {
         </Form.Item>
 
         <Form.Item
-          name="user_Skype_Profile_url"
-          rules={[{ required: true, message: "Skype profile URL is required" }]}
+          name="user_Facebook"
+          rules={[
+            { required: true, message: "Facebook profile url is required" },
+          ]}
         >
-          <Input prefix={<SkypeOutlined />} placeholder="Skype Profile URL *" />
+          <Input
+            prefix={<FacebookOutlined />}
+            placeholder="Facebook profile url*"
+          />
         </Form.Item>
 
+        <Form.Item name="user_Skype">
+          <Input prefix={<SkypeOutlined />} placeholder="Skype profile url *" />
+        </Form.Item>
+
+        <Form.Item name="user_Telegram">
+          <Input
+            prefix={<SkypeOutlined />}
+            placeholder="Telegram Profile url *"
+          />
+        </Form.Item>
         <Form.Item
-          name="user_Facebook_Profile_url"
-          rules={[{ required: true, message: "Facebook profile URL is required" }]}
+          className="w-full flex justify-center"
+          name="user_Image"
+          rules={[{ required: true, message: "Please Select Product Image" }]}
         >
-          <Input prefix={<FacebookOutlined />} placeholder="Facebook Profile URL *" />
+          <Upload
+            className="md:min-w-96 min-w-72"
+            customRequest={handleCustomRequest}
+            listType="picture-card"
+            fileList={fileList}
+            onRemove={handleRemove}
+          >
+            {fileList.length === 0 && (
+              <div>
+                <PlusOutlined />
+                <div style={{ marginTop: 8 }}>Upload</div>
+              </div>
+            )}
+          </Upload>
         </Form.Item>
 
         <Form.Item>
@@ -118,7 +217,10 @@ const SignIn: React.FC = () => {
           </Button>
         </Form.Item>
         <p>
-          Already Signed In? <Link to={'/login'}><span className="text-green-600">Click Here</span></Link>
+          Already Signed In?{" "}
+          <Link to={"/login"}>
+            <span className="text-green-600">Click Here</span>
+          </Link>
         </p>
       </Form>
     </div>
