@@ -30,11 +30,15 @@ export const loginUser = createAsyncThunk(
     try {
       console.log(credentials);
 
-      const response = await axios.get(
-        "http://localhost:5000/api/v1/auth", 
-        { params: credentials } 
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/auth",
+        credentials, // Send credentials as the request body
+        {
+          withCredentials: true, // Include cookies with the request
+        }
       );
       
+
       console.log(response);
 
       const { accessToken } = response.data.data;
@@ -86,9 +90,12 @@ export const refreshAccessToken = createAsyncThunk(
   "auth/refreshAccessToken",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/v1/refresh-token", {
-        withCredentials: true,
-      });
+      const response = await axios.get(
+        "http://localhost:5000/api/v1/refresh-token",
+        {
+          withCredentials: true,
+        }
+      );
 
       const { accessToken } = response.data;
 
@@ -170,5 +177,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, clearAuth  } = authSlice.actions;
+export const { clearError, clearAuth } = authSlice.actions;
 export default authSlice.reducer;
